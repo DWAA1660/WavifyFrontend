@@ -50,7 +50,20 @@
         p {
             color: #777;
         }
+
+        #audioPlayerContainer {
+                position: sticky;
+                bottom: 0;
+                background-color: white;
+                padding: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+        }
+            
+
     </style>
+    <script src="{{ url_for('static', filename='search.js') }}"></script>
+
 </head>
 <body>
     <header>
@@ -59,7 +72,8 @@
     <main>
         <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>
         {% for result in results %}
-        <div class="result" id="result">
+        <div class="result" id="result" onClick="playSong('{{ result.id }}')">
+
             <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
             <h2>{{ result.title }}</h2>
             <p><strong>Channel:</strong> {{ result.channel }}</p>
@@ -70,33 +84,9 @@
         </div> 
         {% endfor %}
 
-        <script>
-            function toggleLoop() {
-                var audio = document.getElementById('audio');
-                var loopButton = document.querySelector('.loop-button');
-                
-                // Toggle loop property
-                console.log(audio.loop);
-                audio.loop = !audio.loop;
-                console.log(audio.loop);
-
-                // Add event listener to restart audio when it ends and loop is enabled
-                if (audio.loop) {
-                    audio.addEventListener('ended', function() {
-                        if (audio.loop){
-                        audio.currentTime = 0; // Restart the audio
-                        audio.play();
-                        }
-                    });
-
-                    // Change button text to indicate loop is enabled
-                    loopButton.textContent = 'Disable Loop';
-                } else {
-                    // Change button text to indicate loop is disabled
-                    loopButton.textContent = 'Enable Loop';
-                }
-            }
-        </script>
+        
     </main>
+    <div id="audioPlayerContainer"></div>
+
 </body>
 </html>
