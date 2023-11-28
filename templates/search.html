@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .result {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .result img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 3px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        p {
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Search Results</h1>
+    </header>
+    <main>
+        <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>
+        {% for result in results %}
+        <div class="result" id="result">
+            <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
+            <h2>{{ result.title }}</h2>
+            <p><strong>Channel:</strong> {{ result.channel }}</p>
+            <audio controls id="audio" src="http://node2.lunes.host:27237/song_from_yt/{{ result.id }}">
+                Your browser does not support the audio element.
+            </audio>
+            
+        </div> 
+        {% endfor %}
+
+        <script>
+            function toggleLoop() {
+                var audio = document.getElementById('audio');
+                var loopButton = document.querySelector('.loop-button');
+                
+                // Toggle loop property
+                console.log(audio.loop);
+                audio.loop = !audio.loop;
+                console.log(audio.loop);
+
+                // Add event listener to restart audio when it ends and loop is enabled
+                if (audio.loop) {
+                    audio.addEventListener('ended', function() {
+                        if (audio.loop){
+                        audio.currentTime = 0; // Restart the audio
+                        audio.play();
+                        }
+                    });
+
+                    // Change button text to indicate loop is enabled
+                    loopButton.textContent = 'Disable Loop';
+                } else {
+                    // Change button text to indicate loop is disabled
+                    loopButton.textContent = 'Enable Loop';
+                }
+            }
+        </script>
+    </main>
+</body>
+</html>
