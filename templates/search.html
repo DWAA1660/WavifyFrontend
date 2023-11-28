@@ -72,14 +72,12 @@
     <main>
         <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>
         {% for result in results %}
-        <div class="result" id="result" onClick="playSong('{{ result.id }}')">
+        <div class="result" id="result" onClick="almostPlaySong('{{ result.id }}')">
 
             <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
             <h2>{{ result.title }}</h2>
             <p><strong>Channel:</strong> {{ result.channel }}</p>
-            <audio controls id="audio" src="http://node2.lunes.host:27237/song_from_yt/{{ result.id }}">
-                Your browser does not support the audio element.
-            </audio>
+
             
         </div> 
         {% endfor %}
