@@ -61,4 +61,4 @@ def search():
         return render_template("search.html", results=clean_returned)
 
 if __name__ == "__main__":
-    app.run("0.0.0.0")
+    app.run("0.0.0.0", port=27163)
