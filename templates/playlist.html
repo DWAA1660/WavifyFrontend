@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .result {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .result img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 3px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        p {
+            color: #777;
+        }
+
+        #audioPlayerContainer {
+                position: sticky;
+                bottom: 0;
+                background-color: white;
+                padding: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+        }
+            
+
+    </style>
+    <script src="{{ url_for('static', filename='search.js') }}"></script>
+
+</head>
+<body>
+    <header>
+        <h1>Search Results</h1>
+    </header>
+    <main>
+        {% for result in results %}
+        <div class="result" id="result" onClick="almostPlaySong('{{ result.id }}')">
+
+            <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
+            <h2>{{ result.title }}</h2>
+            <p><strong>Channel:</strong> {{ result.channel }}</p>
+
+            
+        </div> 
+        {% endfor %}
+
+        
+    </main>
+    <script>
+        window.onload = function() {
+            // Iterate over results and call almostPlaySong for each result
+            {% for result in results %}
+                almostPlaySong('{{ result.id }}');
+            {% endfor %}
+        };
+    </script>
+    <div id="audioPlayerContainer"></div>
+
+</body>
+</html>
