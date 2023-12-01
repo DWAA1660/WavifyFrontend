@@ -79,7 +79,7 @@ def search():
         for i2 in range(len(threads)):
             status = threads[i2].join()
             if status == "Blacklisted":
-                cleaned_results.remove(results_json['videos'][i2])
+                cleaned_results.remove(results_json[i2])
                 
             print(status)
             
