@@ -25,7 +25,7 @@ function playSong(songId) {
     var audio = document.createElement('audio');
     audio.controls = true;
     audio.autoplay = true;
-    audio.src = `http://node2.lunes.host:27237/song_from_yt/${songId}`;
+    audio.src = `https://musicbackend.lunes.host/song_from_yt/${songId}`;
     audio.id = "dynamicplayer"
     
     // Add a loop button
