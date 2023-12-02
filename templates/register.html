@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>Register</h2>
-    <form id="registerForm" action="{{ url_for('register') }}" method="POST">
+    <form id="registerForm" action="{{ url_for('auth.register') }}" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
 
@@ -20,6 +20,6 @@
         <button type="submit">Register</button>
     </form>
 
-    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
+    <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a>.</p>
 </body>
 </html>

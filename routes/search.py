@@ -1,15 +1,20 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, current_app
 from main import download_video
 
 from youtube_search_music import YoutubeMusicSearch
 from threadedreturn import ThreadWithReturnValue
 from config import GOOGLE_API
+from sqlalchemy import text
+from main import db
 
 from threadedreturn import ThreadWithReturnValue
 search_bp = Blueprint('search', __name__)
 
 @search_bp.route("/", methods=["GET"])
 def index():
+    with current_app.app_context():
+        print(db.session.execute(text("SELECT * FROM user")).fetchone())
+
     return render_template("index.html")
 
 

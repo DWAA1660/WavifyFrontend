@@ -27,14 +27,14 @@ def register():
         email = request.form.get('email')
         username = request.form.get('username')
         password = request.form.get('password')
-        res = db.session.execute(text("SELECT * FROM user WHERE email = :email"), {"email": email}).fetchone()
-        print(res)
-        if res is None:
-            with current_app.app_context():
+        with current_app.app_context():
+            res = db.session.execute(text("SELECT * FROM user WHERE email = :email"), {"email": email}).fetchone()
+            print(res)
+            if res is None:
                 #this is currently unhashed for debugging purposes i know to not do this
                 db.session.add(User(email=email, username=username, password=password))
                 db.session.commit()
-        else:
-            return "your already registered"
-        return redirect(url_for('login'))
+            else:
+                return "your already registered"
+            return redirect(url_for('login'))
     return render_template('register.html')

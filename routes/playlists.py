@@ -18,8 +18,8 @@ def create_playlist():
         return redirect(url_for('login'))
     if request.method == "POST":
         name = request.form.get("name")
-        owner_id = email_to_id(session['email'])
         with current_app.app_context():
+            owner_id = email_to_id(session['email'], current_app)
             db.session.add(Playlists(name=name, owner_id=owner_id, songs=""))
             db.session.commit()
     return render_template('playlists.html')
