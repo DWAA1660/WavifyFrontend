@@ -21,10 +21,11 @@ function playNextSong(reversed){
 }
 
 function playSong(songId) {
+    // Create an audio element
     var audio = document.createElement('audio');
     audio.controls = true;
     audio.autoplay = true;
-    audio.src = `http://node2.lunes.host:27237/song_from_yt/${songId}`;
+    audio.src = `https://musicbackend.lunes.host/song_from_yt/${songId}`;
     audio.id = "dynamicplayer"
     
     // Add a loop button
@@ -48,10 +49,11 @@ function playSong(songId) {
     }
 
     audio.addEventListener('ended', function() {
+        // If loop is enabled, start the song over
         playedSongs.push(songId);
         if (audio.loop) {
             audio.currentTime = 0;
-            audio.play();
+            audio.play(); // Restart the audio
         }
         else {
             if (queue.length > 0){
@@ -60,6 +62,7 @@ function playSong(songId) {
         }
     });
 
+    // Create a container div for both the audio element and loop button
     var container = document.getElementById('audioPlayerContainer');
     container.innerHTML = '';
     container.appendChild(audio);
