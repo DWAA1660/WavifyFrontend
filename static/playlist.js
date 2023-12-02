@@ -21,7 +21,6 @@ function playNextSong(reversed){
 }
 
 function playSong(songId) {
-    // Create an audio element
     var audio = document.createElement('audio');
     audio.controls = true;
     audio.autoplay = true;
@@ -49,11 +48,10 @@ function playSong(songId) {
     }
 
     audio.addEventListener('ended', function() {
-        // If loop is enabled, start the song over
         playedSongs.push(songId);
         if (audio.loop) {
             audio.currentTime = 0;
-            audio.play(); // Restart the audio
+            audio.play();
         }
         else {
             if (queue.length > 0){
@@ -62,9 +60,8 @@ function playSong(songId) {
         }
     });
 
-    // Create a container div for both the audio element and loop button
     var container = document.getElementById('audioPlayerContainer');
-    container.innerHTML = ''; // Clear previous content
+    container.innerHTML = '';
     container.appendChild(audio);
     container.appendChild(loopButton);
     container.appendChild(skipButton);

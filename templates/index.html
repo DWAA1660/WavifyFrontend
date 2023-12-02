@@ -1,17 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.17/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Search Page</h1>
 
-    <form action="/search" method="post">
-        <label for="search_query">Search:</label>
-        <input type="text" id="search_query" name="search_query" required>
-        <button type="submit">Search</button>
-    </form>
+<body data-theme="night">
+    <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content text-center">
+            <div class="max-w-md">
+                <h1 class="text-5xl font-bold">Waveify</h1>
+                <p class="py-6">Where music should not and should never be behind a paywall.</p>
+                <button class="btn btn-primary">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="bg-base-200 p-8">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold mb-4">About Waveify</h2>
+            <p class="text-lg">Welcome to "Waveify", a place where we provide music without a paywall! Here at Waveify, we believe that music should not be locked behind paywalls or disturbed by ads. With Waveify, you can enjoy your favorite music without annoying ads lurking on your player.</p>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="bg-base-200 p-8">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold mb-4">Features</h2>
+            <p class="text-lg">Waveify offers a wide range of features to enhance your music experience. Here are some of the features that we offer:</p>
+    
+            <br>
+    
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-base-100 p-4 rounded-lg shadow-md flex items-center">
+                    <div>
+                        <i class="fas fa-music text-2xl mr-2"></i>
+                        <h3 class="text-xl font-bold mb-2">Ad-Free Experience</h3>
+                        <p>Enjoy an uninterrupted music experience without any ads.</p>
+                    </div>
+                </div>
+    
+                <div class="bg-base-100 p-4 rounded-lg shadow-md flex items-center">
+                    <div>
+                        <i class="fas fa-headphones text-2xl mr-2"></i>
+                        <h3 class="text-xl font-bold mb-2">High-Quality Streaming</h3>
+                        <p>Stream your favorite music in high-quality audio.</p>
+                    </div>
+                </div>
+    
+                <div class="bg-base-100 p-4 rounded-lg shadow-md flex items-center">
+                    <div>
+                        <i class="fas fa-globe text-2xl mr-2"></i>
+                        <h3 class="text-xl font-bold mb-2">Free Unlimited Access</h3>
+                        <p>Access a vast library of songs without any restrictions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content mt-0" style="margin-top: 0;">
+        <aside>
+          <p>Copyright © 2023 - All right reserved by Waveify Development Team</p>
+        </aside>
+    </footer>
 </body>
+
 </html>
