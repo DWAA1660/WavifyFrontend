@@ -22,7 +22,7 @@ def index():
 def download_video(yt_id: str):
     url= f"https://www.youtube.com/watch?v={yt_id}"
     
-    res = requests.post("http://node2.lunes.host:27237/download", headers={"url": url}).text
+    res = requests.post("https://musicbackend.lunes.host/download", headers={"url": url}).text
     print(res)
     return res
 
@@ -112,6 +112,8 @@ def search():
                 print(result)
 
         return render_template("search.html", results=clean_returned)
+    else:
+        return render_template("search.html", results=None)
 
 
 if __name__ == "__main__":

@@ -78,25 +78,32 @@
 
 </head>
 <body>
-    <header>
-        <h1>Search Results</h1>
-    </header>
-    <main>
-        <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>
-        {% for result in results %}
-        <div class="result" id="result" onClick="almostPlaySong('{{ result.id }}')">
+    {% if results is none %}
+        <form action="/search" method="post">
+            <label for="search_query">Search:</label>
+            <input type="text" id="search_query" name="search_query" required>
+            <button type="submit">Search</button>
+        </form>
+    {% else %}
+        <header>
+            <h1>Search Results</h1>
+        </header>
+        <main>
+            <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>
+            {% for result in results %}
+            <div class="result" id="result" onClick="almostPlaySong('{{ result.id }}')">
 
-            <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
-            <h2>{{ result.title }}</h2>
-            <p><strong>Channel:</strong> {{ result.channel }}</p>
+                <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
+                <h2>{{ result.title }}</h2>
+                <p><strong>Channel:</strong> {{ result.channel }}</p>
+
+                
+            </div> 
+            {% endfor %}
 
             
-        </div> 
-        {% endfor %}
-
-        
-    </main>
-    <div id="audioPlayerContainer"></div>
-
+        </main>
+        <div id="audioPlayerContainer"></div>
+    {% endif %}
 </body>
 </html>
