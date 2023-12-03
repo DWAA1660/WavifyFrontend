@@ -6,13 +6,16 @@
     <title>Login</title>
 </head>
 <body>
-    <h2>Login</h2>
+    <h2>playlists</h2>
     <form id="loginForm" action="{{ url_for('playlists.create_playlist') }}" method="POST">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
         <button type="submit">Create</button>
     </form>
+    {%for playlist in playlists%}
+        {{playlist}}
+    {%endfor%}
 
-    <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a>.</p>
+
 </body>
 </html>

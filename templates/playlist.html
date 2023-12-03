@@ -88,13 +88,13 @@
 <body>
     {% if results is none %}
         <form action="/search" method="post">
-            <label for="search_query">Search:</label>
+            <label for="search_query">make playlist:</label>
             <input type="text" id="search_query" name="search_query" required>
             <button type="submit">Search</button>
         </form>
     {% else %}
         <header>
-            <h1>Search Results</h1>
+            <h1>playlist</h1>
         </header>
         <main>
             <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>

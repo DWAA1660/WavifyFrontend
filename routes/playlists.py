@@ -1,8 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, session
-from models.playlists import Playlists
 from main import db, download_video
 from scripts import email_to_id
-from sqlalchemy import Integer, String, text
 from youtube_search import YoutubeSearch
 from spotify import get_all_song_names
 from proxy import get_proxy
@@ -19,14 +17,17 @@ def create_playlist():
     if request.method == "POST":
         name = request.form.get("name")
         with current_app.app_context():
-            owner_id = email_to_id(session['email'], current_app)
-            db.session.add(Playlists(name=name, owner_id=owner_id, songs=""))
-            db.session.commit()
-    return render_template('playlists.html')
+            owner_id = email_to_id(session['email'])
+            if owner_id is not None:
+                db.execute("INSERT INTO playlists (owner_id, name) VALUES (?, ?)", (owner_id[0], name))
+    return redirect(url_for('playlists.playlist'))
 
 @playlists_bp.route("/playlists")
 def playlist():
-    return render_template('playlists.html')
+    print(email_to_id(session['email']), 1)
+    playlists = db.execute("SELECT * FROM playlists WHERE owner_id = ?", (email_to_id(session['email'])[0],)).fetchall()
+    print(playlists)
+    return render_template('playlists.html', playlists=playlists)
 
 @playlists_bp.route("/playlist", methods=["GET", "POST"])
 def spotify():

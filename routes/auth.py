@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, session
-from models.user import User
-from main import db, create_app
-from sqlalchemy import Integer, String, text
+from main import create_app, db
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -12,10 +10,10 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         with current_app.app_context():
-            res = db.session.execute(text("SELECT * FROM user WHERE email = :email AND password = :password"), {"email": email, "password": password}).fetchone()
+            res = db.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password,)).fetchone()
             if res is not None:
                 session['email'] = email
-                return redirect(url_for('index'))
+                return redirect(url_for('search.index'))
             else:
                 return "WRONG LOSER"
     return render_template('login.html')
@@ -28,13 +26,13 @@ def register():
         username = request.form.get('username')
         password = request.form.get('password')
         with current_app.app_context():
-            res = db.session.execute(text("SELECT * FROM user WHERE email = :email"), {"email": email}).fetchone()
+            res = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
             print(res)
             if res is None:
                 #this is currently unhashed for debugging purposes i know to not do this
-                db.session.add(User(email=email, username=username, password=password))
-                db.session.commit()
+                db.execute("INSERT INTO users (username, email, password, display_name) VALUES (?, ?, ?, ?)", (username, email, password, username))
+
             else:
                 return "your already registered"
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
     return render_template('register.html')
