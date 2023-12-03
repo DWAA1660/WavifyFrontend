@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, request, current_app
+from flask import Blueprint, render_template, request, current_app, session, redirect, url_for
 from main import download_video
 
 from youtube_search_music import YoutubeMusicSearch
 from threadedreturn import ThreadWithReturnValue
 from config import GOOGLE_API
 from main import db
+from scripts import get_playlists
 
 from threadedreturn import ThreadWithReturnValue
 search_bp = Blueprint('search', __name__)
@@ -16,6 +17,8 @@ def index():
 
 @search_bp.route("/search", methods=["POST", "GET"])
 def search():
+    if 'email' not in session:
+        return redirect(url_for('auth.login'))
     if request.method == "POST":
         query = request.form["search_query"]
         results_json = YoutubeMusicSearch(GOOGLE_API).search(query)
@@ -52,8 +55,9 @@ def search():
                 )
             except IndexError:
                 print(result)
-
-        return render_template("search.html", results=clean_returned)
+        playlists = get_playlists(session['email'])
+        print(playlists)
+        return render_template("search.html", results=clean_returned, playlists=playlists)
     else:
         return render_template("search.html", results=None)
 

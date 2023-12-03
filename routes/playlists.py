@@ -29,6 +29,15 @@ def playlist():
     print(playlists)
     return render_template('playlists.html', playlists=playlists)
 
+@playlists_bp.route("/add_song", methods=["POST"])
+def add_song():
+    song_id = request.form["song_id"]
+    pl_id = request.form["pl_id"]
+    res = db.execute("SELECT * from playlists where owner_id = ? AND id = ?", (email_to_id(session['email'])[0], pl_id)).fetchone()
+    if res is not None:
+        new_songs = f"{res[2]}&&{song_id}"
+        db.execute("UPDATE playlists SET songs = ? WHERE id = ?", (new_songs, pl_id))
+
 @playlists_bp.route("/playlist", methods=["GET", "POST"])
 def spotify():
     pl_id = request.args["pl_id"]

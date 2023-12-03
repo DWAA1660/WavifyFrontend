@@ -89,6 +89,7 @@
             <h1>Search Results</h1>
         </header>
         <main>
+            {{playlists}}
             <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>
             {% for result in results %}
             <div class="result" id="result" onClick="almostPlaySong('{{ result.id }}')">
