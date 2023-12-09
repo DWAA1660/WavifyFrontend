@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plalist Page</title>
+    <title>{{name}}</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -90,7 +90,7 @@
         <h1>No songs in this playlist</h1>
     {% else %}
         <header>
-            <h1>playlist</h1>
+            <h1>{{name}} made by {{owner}}</h1>
         </header>
         <main>
             <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>

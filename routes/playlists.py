@@ -80,7 +80,8 @@ def play_playlist(pl_id: str):
         if info is not None:
             info['thumbnail'] = f"https://img.youtube.com/vi/{info['yt_id']}/0.jpg"
             cleaned_results.append(info)
-    return render_template('playlist.html', results=cleaned_results)
+    owner_name = db.execute("SELECT display_name from users where id = ?", (res[1],)).fetchone()
+    return render_template('playlist.html', results=cleaned_results, name=res[3], owner=owner_name[0])
     
 
 @playlists_bp.route("/spotify", methods=["GET", "POST"])
