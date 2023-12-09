@@ -4,11 +4,17 @@ from scripts import email_to_id
 from youtube_search import YoutubeSearch
 from spotify import get_all_song_names
 from proxy import get_proxy
-import os
+import os, json
+import requests
 from threadedreturn import ThreadWithReturnValue
 from concurrent.futures import ThreadPoolExecutor
 
 playlists_bp = Blueprint('playlists', __name__)
+
+def get_song_info(yt_id: str):
+    resp = requests.get(f"https://musicbackend.lunes.host/song_from_yt_info/{yt_id}").text
+    print(resp, yt_id)
+    return json.loads(resp)
 
 @playlists_bp.route("/playlist-create", methods=["GET", "POST"])
 def create_playlist():
@@ -24,10 +30,16 @@ def create_playlist():
 
 @playlists_bp.route("/playlists")
 def playlist():
-    print(email_to_id(session['email']), 1)
-    playlists = db.execute("SELECT * FROM playlists WHERE owner_id = ?", (email_to_id(session['email'])[0],)).fetchall()
-    print(playlists)
-    return render_template('playlists.html', playlists=playlists)
+    if 'email' not in session:
+        return redirect(url_for('auth.login'))
+    user_id = email_to_id(session['email'])
+    if user_id is None:
+        return redirect(url_for('auth.register'))
+    playlists_json = []
+    playlists = db.execute("SELECT * FROM playlists WHERE owner_id = ?", (user_id[0],)).fetchall()
+    for playlist in playlists:
+        playlists_json.append({"id": playlist[0], "owner_id": playlist[1], "songs":playlist[2], "name": playlist[3]})
+    return render_template('playlists.html', playlists=playlists_json)
 
 @playlists_bp.route("/add_song", methods=["POST"])
 def add_song():
@@ -35,10 +47,43 @@ def add_song():
     pl_id = request.form["pl_id"]
     res = db.execute("SELECT * from playlists where owner_id = ? AND id = ?", (email_to_id(session['email'])[0], pl_id)).fetchone()
     if res is not None:
-        new_songs = f"{res[2]}&&{song_id}"
+        old_songs = res[2]
+        if old_songs is None:
+            old_songs = ""
+        new_songs = f"{old_songs}&&{song_id}"
         db.execute("UPDATE playlists SET songs = ? WHERE id = ?", (new_songs, pl_id))
+        
+@playlists_bp.route("/playlist/<pl_id>", methods=["GET"])
+def play_playlist(pl_id: str):
+    res = db.execute("SELECT * from playlists where id = ?", (pl_id,)).fetchone()
+    if res is None:
+        return "This playlist doesnt exist"
+    try:
+        songs_list=res[2].split("&&")
+        songs_list.remove(songs_list[0])
+    except AttributeError:
+        songs_list = []
+        
+    if songs_list == []:
+        return render_template('playlist.html', results=None)
+    threads = {}
+    i = 0
+    for song in songs_list:
+        threads[i] = ThreadWithReturnValue(target=get_song_info, args=(song,))
+        threads[i].start()
+        i += 1
+    
+    cleaned_results = []
+    
+    for i in range(len(threads)):
+        info = threads[i].join()
+        if info is not None:
+            info['thumbnail'] = f"https://img.youtube.com/vi/{info['yt_id']}/0.jpg"
+            cleaned_results.append(info)
+    return render_template('playlist.html', results=cleaned_results)
+    
 
-@playlists_bp.route("/playlist", methods=["GET", "POST"])
+@playlists_bp.route("/spotify", methods=["GET", "POST"])
 def spotify():
     pl_id = request.args["pl_id"]
     print(pl_id)

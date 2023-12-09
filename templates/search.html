@@ -75,6 +75,36 @@
     <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var addSongButtons = document.querySelectorAll('.add-song-button');
+    
+            addSongButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var songId = this.getAttribute('data-song-id');
+                    var playlistId = document.getElementById('playlist_to_add').value;
+    
+                    // Send AJAX request
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/add_song', true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            // Handle the response if needed
+                            console.log(xhr.responseText);
+                        }
+                    };
+    
+                    // Construct the request body
+                    var params = 'song_id=' + encodeURIComponent(songId) + '&pl_id=' + encodeURIComponent(playlistId);
+    
+                    // Send the request
+                    xhr.send(params);
+                });
+            });
+        });
+    </script>
+    
 
 </head>
 <body>
@@ -89,14 +119,21 @@
             <h1>Search Results</h1>
         </header>
         <main>
-            {{playlists}}
-            <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>
+            <select id="playlist_to_add" name="playlist_to_ad" required>
+                {% for playlist in playlists %}
+                <option value="{{ playlist[0] }}">{{ playlist[3] }}</option>
+                {% endfor %}
+            </select>
+            
+
             {% for result in results %}
             <div class="result" id="result" onClick="almostPlaySong('{{ result.id }}')">
 
                 <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
                 <h2>{{ result.title }}</h2>
                 <p><strong>Channel:</strong> {{ result.channel }}</p>
+                <button class="add-song-button" data-song-id="{{ result.id }}">Add to Playlist</button>
+
 
                 
             </div> 

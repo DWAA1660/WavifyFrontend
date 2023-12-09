@@ -12,10 +12,11 @@
         <input type="text" id="name" name="name" required>
         <button type="submit">Create</button>
     </form>
+    <ul>
     {%for playlist in playlists%}
-        {{playlist}}
+        <li><a href="{{url_for('playlists.play_playlist', pl_id=playlist.id)}}"> {{playlist.name}} </a></li>
     {%endfor%}
-
+    </ul>
 
 </body>
 </html>

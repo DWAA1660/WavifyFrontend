@@ -9,13 +9,14 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        with current_app.app_context():
-            res = db.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password,)).fetchone()
-            if res is not None:
-                session['email'] = email
-                return redirect(url_for('search.index'))
-            else:
-                return "WRONG LOSER"
+        print(email, password)
+        res = db.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password,)).fetchone()
+        print(res)
+        if res is not None:
+            session['email'] = email
+            return redirect(url_for('search.index'))
+        else:
+            return "WRONG LOSER"
     return render_template('login.html')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
