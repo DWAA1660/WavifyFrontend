@@ -47,12 +47,12 @@ def spotify():
 
     def process_song(song):
         try:
-            proxy = get_proxy()
-            print(proxy)
-            os.environ["HTTP_PROXY"] = proxy
+            # proxy = get_proxy()
+            # print(proxy)
+            # os.environ["HTTP_PROXY"] = proxy
             try:
                 results_json = YoutubeSearch(song, max_results=1).to_dict()
-                del os.environ["HTTP_PROXY"]
+                # del os.environ["HTTP_PROXY"]
                 try:
                     result = results_json[0]
                 except KeyError:
