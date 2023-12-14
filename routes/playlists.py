@@ -110,7 +110,7 @@ async def play_playlist(pl_id: str):
     print(time.time() - request_time, 5)
     owner_name = db.execute("SELECT display_name from users where id = ?", (res[1],)).fetchone()
     print(time.time() - request_time, 6)
-    return render_template('playlist.html', results=cleaned_results, name=res[3], owner=owner_name[0])
+    return render_template('playlist.html', results=cleaned_results, name=res[3], owner=owner_name[0], pl_id=pl_id)
     
 
 @playlists_bp.route("/spotify", methods=["GET", "POST"])
