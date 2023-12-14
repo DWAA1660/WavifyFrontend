@@ -4,7 +4,7 @@ from scripts import email_to_id
 from youtube_search import YoutubeSearch
 from spotify import get_all_song_names
 from proxy import get_proxy
-import os, json
+import os, json, time
 from scripts import get_playlists
 import requests
 from threadedreturn import ThreadWithReturnValue
@@ -14,7 +14,6 @@ playlists_bp = Blueprint('playlists', __name__)
 
 def get_song_info(yt_id: str):
     resp = requests.get(f"https://musicbackend.lunes.host/song_from_yt_info/{yt_id}").text
-    print(resp, yt_id)
     return json.loads(resp)
 
 @playlists_bp.route("/playlist-create", methods=["GET", "POST"])
@@ -44,6 +43,7 @@ def playlist():
 
 @playlists_bp.route("/add_song", methods=["POST"])
 def add_song():
+
     song_id = request.form["song_id"]
     pl_id = request.form["pl_id"]
     res = db.execute("SELECT * from playlists where owner_id = ? AND id = ?", (email_to_id(session['email'])[0], pl_id)).fetchone()
@@ -57,7 +57,10 @@ def add_song():
         
 @playlists_bp.route("/playlist/<pl_id>", methods=["GET"])
 def play_playlist(pl_id: str):
+    request_time = time.time()
+    print(time.time() - request_time, 1)
     res = db.execute("SELECT * from playlists where id = ?", (pl_id,)).fetchone()
+    print(time.time() - request_time, 2)
     if res is None:
         return "This playlist doesnt exist"
     try:
@@ -68,13 +71,14 @@ def play_playlist(pl_id: str):
         
     if songs_list == []:
         return render_template('playlist.html', results=None)
+    print(time.time() - request_time, 3)
     threads = {}
     i = 0
     for song in songs_list:
         threads[i] = ThreadWithReturnValue(target=get_song_info, args=(song,))
         threads[i].start()
         i += 1
-    
+    print(time.time() - request_time, 4)
     cleaned_results = []
     
     for i in range(len(threads)):
@@ -82,7 +86,9 @@ def play_playlist(pl_id: str):
         if info is not None:
             info['thumbnail'] = f"https://img.youtube.com/vi/{info['yt_id']}/0.jpg"
             cleaned_results.append(info)
+    print(time.time() - request_time, 5)
     owner_name = db.execute("SELECT display_name from users where id = ?", (res[1],)).fetchone()
+    print(time.time() - request_time, 6)
     return render_template('playlist.html', results=cleaned_results, name=res[3], owner=owner_name[0])
     
 
