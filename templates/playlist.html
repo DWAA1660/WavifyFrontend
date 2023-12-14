@@ -102,6 +102,41 @@
             });
         });
     </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var addSongButtons = document.querySelectorAll('.add-song-button');
+    
+            addSongButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var songId = this.getAttribute('data-song-id');
+                    var playlistId = document.getElementById('playlist_to_add').value;
+    
+                    // Send AJAX request
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/remove_song', true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            // Handle the response if needed
+                            console.log(xhr.responseText);
+                        }
+                    };
+    
+                    // Construct the request body
+                    var params = 'song_id=' + encodeURIComponent(songId) + '&pl_id=' + encodeURIComponent(playlistId);
+    
+                    // Send the request
+                    xhr.send(params);
+                });
+            });
+        });
+    </script>
+
+
+
+
 </head>
 <body>
     {% if results is none %}
@@ -118,6 +153,7 @@
                 <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
                 <h2>{{ result.title }}</h2>
                 <p><strong>Channel:</strong> {{ result.channel }}</p>
+                <button class="add-song-button" data-song-id="{{ result.id }}">Remove from Playlist</button>
 
                 
             </div> 

@@ -65,6 +65,27 @@ def add_song():
         new_songs = f"{old_songs}&&{song_id}"
         db.execute("UPDATE playlists SET songs = ? WHERE id = ?", (new_songs, pl_id))
         return "Success"
+    
+    
+@playlists_bp.route("/remove_song", methods=["POST"])
+def add_song():
+
+    song_id = request.form["song_id"]
+    pl_id = request.form["pl_id"]
+    res = db.execute("SELECT * from playlists where owner_id = ? AND id = ?", (email_to_id(session['email'])[0], pl_id)).fetchone()
+    if res is not None:
+        old_songs = res[2]
+        if old_songs is None:
+            old_songs = ""
+        old_songs_list = old_songs.split("&&")
+        old_songs_list.remove(song_id)
+        
+        new_songs = '&&'.join(old_songs_list)
+        db.execute("UPDATE playlists SET songs = ? WHERE id = ?", (new_songs, pl_id))
+        return "Success"
+    else:
+        return "ur not owner"
+        
         
 @playlists_bp.route("/playlist/<pl_id>", methods=["GET"])
 async def play_playlist(pl_id: str):
@@ -76,7 +97,7 @@ async def play_playlist(pl_id: str):
         return "This playlist doesnt exist"
     try:
         songs_list=res[2].split("&&")
-        songs_list.remove(songs_list[0])
+        songs_list.remove("")
     except AttributeError:
         songs_list = []
         
