@@ -14,6 +14,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 playlists_bp = Blueprint('playlists', __name__)
 
+def divide_into_groups(lst, group_size):
+    return [lst[i:i + group_size] for i in range(0, len(lst), group_size)]
+
 async def fetch_song_info(session, song):
     url = f"https://musicbackend.lunes.host/song_from_yt_info/{song}"
     async with session.get(url) as response:
@@ -92,11 +95,13 @@ async def play_playlist(pl_id: str):
 @playlists_bp.route("/spotify", methods=["GET", "POST"])
 def spotify():
     pl_id = request.args["pl_id"]
+    page = request.args.get("page", 0)
     print(pl_id)
     if 'email' not in session:
         return redirect(url_for('auth.login'))
     clean_returned = []
     songs = get_all_song_names(pl_id)
+    grouped_songs = divide_into_groups(songs, 20)
 
     def process_song(song):
         try:
@@ -131,7 +136,7 @@ def spotify():
             print(e)
 
     with ThreadPoolExecutor(max_workers=4) as executor:
-        executor.map(process_song, songs)
+        executor.map(process_song, songs[page])
 
     playlists = get_playlists(session['email'])
     return render_template("search.html", results=clean_returned, playlists=playlists)
