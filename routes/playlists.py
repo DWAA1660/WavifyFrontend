@@ -8,13 +8,21 @@ import os, json, time
 from scripts import get_playlists
 import requests
 from threadedreturn import ThreadWithReturnValue
+import asyncio
+import aiohttp
 from concurrent.futures import ThreadPoolExecutor
 
 playlists_bp = Blueprint('playlists', __name__)
 
-def get_song_info(yt_id: str):
-    resp = requests.get(f"https://musicbackend.lunes.host/song_from_yt_info/{yt_id}").text
-    return json.loads(resp)
+async def fetch_song_info(session, song):
+    url = f"https://musicbackend.lunes.host/song_from_yt_info/{song}"
+    async with session.get(url) as response:
+        return await response.json()
+
+async def fetch_all_song_info(songs_list):
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch_song_info(session, song) for song in songs_list]
+        return await asyncio.gather(*tasks)
 
 @playlists_bp.route("/playlist-create", methods=["GET", "POST"])
 def create_playlist():
@@ -56,7 +64,7 @@ def add_song():
         return "Success"
         
 @playlists_bp.route("/playlist/<pl_id>", methods=["GET"])
-def play_playlist(pl_id: str):
+async def play_playlist(pl_id: str):
     request_time = time.time()
     print(time.time() - request_time, 1)
     res = db.execute("SELECT * from playlists where id = ?", (pl_id,)).fetchone()
@@ -74,18 +82,7 @@ def play_playlist(pl_id: str):
     print(time.time() - request_time, 3)
     threads = {}
     i = 0
-    for song in songs_list:
-        threads[i] = ThreadWithReturnValue(target=get_song_info, args=(song,))
-        threads[i].start()
-        i += 1
-    print(time.time() - request_time, 4)
-    cleaned_results = []
-    
-    for i in range(len(threads)):
-        info = threads[i].join()
-        if info is not None:
-            info['thumbnail'] = f"https://img.youtube.com/vi/{info['yt_id']}/0.jpg"
-            cleaned_results.append(info)
+    cleaned_results = await fetch_all_song_info(songs_list)
     print(time.time() - request_time, 5)
     owner_name = db.execute("SELECT display_name from users where id = ?", (res[1],)).fetchone()
     print(time.time() - request_time, 6)
