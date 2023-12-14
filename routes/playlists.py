@@ -130,7 +130,7 @@ def spotify():
         except Exception as e:
             print(e)
 
-    with ThreadPoolExecutor(max_workers=15) as executor:
+    with ThreadPoolExecutor(max_workers=25) as executor:
         executor.map(process_song, songs)
 
     playlists = get_playlists(session['email'])
