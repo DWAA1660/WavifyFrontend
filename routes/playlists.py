@@ -131,9 +131,9 @@ def spotify():
                 except IndexError:
                     print(result)
             except Exception as e:
-                print(e)
+                print(e, 1)
         except Exception as e:
-            print(e)
+            print(e, 2)
 
     print(songs, page)
     with ThreadPoolExecutor(max_workers=4) as executor:
