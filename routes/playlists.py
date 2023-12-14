@@ -130,7 +130,7 @@ def spotify():
     print(songs, page)
     with ThreadPoolExecutor(max_workers=4) as executor:
         
-        executor.map(process_song, songs[page])
+        executor.map(process_song, grouped_songs[page])
 
     playlists = get_playlists(session['email'])
     return render_template("search.html", results=clean_returned, playlists=playlists)
