@@ -78,6 +78,7 @@ def remove_song():
         if old_songs is None:
             old_songs = ""
         old_songs_list = old_songs.split("&&")
+        print(old_songs_list, song_id)
         old_songs_list.remove(song_id)
         
         new_songs = '&&'.join(old_songs_list)
