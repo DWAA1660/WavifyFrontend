@@ -53,6 +53,7 @@ def add_song():
             old_songs = ""
         new_songs = f"{old_songs}&&{song_id}"
         db.execute("UPDATE playlists SET songs = ? WHERE id = ?", (new_songs, pl_id))
+        return "Success"
         
 @playlists_bp.route("/playlist/<pl_id>", methods=["GET"])
 def play_playlist(pl_id: str):
