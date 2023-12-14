@@ -101,7 +101,7 @@ def spotify():
         return redirect(url_for('auth.login'))
     clean_returned = []
     songs = get_all_song_names(pl_id)
-    grouped_songs = divide_into_groups(songs, 20)
+    grouped_songs = divide_into_groups(songs, 10)
 
     def process_song(song):
         try:
