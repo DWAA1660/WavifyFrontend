@@ -68,7 +68,7 @@ def add_song():
     
     
 @playlists_bp.route("/remove_song", methods=["POST"])
-def add_song():
+def remove_song():
 
     song_id = request.form["song_id"]
     pl_id = request.form["pl_id"]
