@@ -5,6 +5,7 @@ from youtube_search import YoutubeSearch
 from spotify import get_all_song_names
 from proxy import get_proxy
 import os, json
+from scripts import get_playlists
 import requests
 from threadedreturn import ThreadWithReturnValue
 from concurrent.futures import ThreadPoolExecutor
@@ -88,6 +89,8 @@ def play_playlist(pl_id: str):
 def spotify():
     pl_id = request.args["pl_id"]
     print(pl_id)
+    if 'email' not in session:
+        return redirect(url_for('auth.login'))
     clean_returned = []
     songs = get_all_song_names(pl_id)
 
@@ -126,6 +129,7 @@ def spotify():
     with ThreadPoolExecutor(max_workers=15) as executor:
         executor.map(process_song, songs)
 
-    return render_template("search.html", results=clean_returned)
+    playlists = get_playlists(session['email'])
+    return render_template("search.html", results=clean_returned, playlists=playlists)
 
 

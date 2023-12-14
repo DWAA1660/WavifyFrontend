@@ -56,7 +56,6 @@ def search():
             except IndexError:
                 print(result)
         playlists = get_playlists(session['email'])
-        print(playlists)
         return render_template("search.html", results=clean_returned, playlists=playlists)
     else:
         return render_template("search.html", results=None)
