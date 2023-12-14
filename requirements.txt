@@ -1,0 +1,7 @@
+aiohttp==3.9.1
+Flask==3.0.0
+Requests==2.31.0
+spotipy==2.23.0
+threadedreturn==1.0.1
+youtube_search==2.1.2
+youtube_search_music==2.1.2
