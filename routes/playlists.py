@@ -126,6 +126,6 @@ def spotify():
     with ThreadPoolExecutor(max_workers=15) as executor:
         executor.map(process_song, songs)
 
-    return render_template("playlist.html", results=clean_returned)
+    return render_template("search.html", results=clean_returned)
 
 
