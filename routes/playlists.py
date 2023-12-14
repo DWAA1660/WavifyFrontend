@@ -104,22 +104,13 @@ def spotify():
     grouped_songs = divide_into_groups(songs, 10)
 
     def process_song(song):
-        try:
-            # proxy = get_proxy()
-            # print(proxy)
-            # os.environ["HTTP_PROXY"] = proxy
-            try:
-                results_json = YoutubeSearch(song, max_results=1).to_dict()
-                # del os.environ["HTTP_PROXY"]
-                try:
-                    result = results_json[0]
-                    print(result, 1.5)
-                except KeyError:
-                    print(results_json)
-                ThreadWithReturnValue(
-                    target=download_video, args=(result["id"],)
-                ).start()
 
+        try:
+            results_json = YoutubeSearch(song, max_results=1).to_dict()
+            if results_json:
+                result = results_json[0]
+                print(result, 1.5)
+                ThreadWithReturnValue(target=download_video, args=(result["id"],)).start()
                 try:
                     clean_returned.append(
                         {
@@ -131,10 +122,10 @@ def spotify():
                     )
                 except IndexError:
                     print(result)
-            except Exception as e:
-                print(e, 1)
+            else:
+                print("No results found for:", song)
         except Exception as e:
-            print(e, 2)
+            print(e, 1)
 
     print(songs, page)
     with ThreadPoolExecutor(max_workers=4) as executor:
