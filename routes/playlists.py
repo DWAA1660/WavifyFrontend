@@ -113,6 +113,7 @@ def spotify():
                 # del os.environ["HTTP_PROXY"]
                 try:
                     result = results_json[0]
+                    print(result, 1.5)
                 except KeyError:
                     print(results_json)
                 ThreadWithReturnValue(
