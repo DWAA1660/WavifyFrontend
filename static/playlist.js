@@ -1,27 +1,32 @@
 // static/script.js
 var queue = []
 var playedSongs = []
-function almostPlaySong(songId) {
+function almostPlaySong(songId, title) {
+    console.log(title);
     var player = document.getElementById("dynamicplayer");
     if (player == null ) {
-        playSong(songId);
+        playSong(songId, title);
     }
     else{
-        queue.push(songId);
+        queue.push({"yt_id": songId, "title": title});
     }
 }
 
 function playNextSong(reversed){
     if (!reversed) {
-    playSong(queue.shift());
+    var item = queue.shift();
+    console.log(item);
+    playSong(item.yt_id, item.title);
     }
     else{
-        playSong(playedSongs[playedSongs.length - 1])
+        var song_item = playedSongs[playedSongs.length - 1]
+        playSong(song_item.yt_id, song_item.title);
     }
 }
 
-function playSong(songId) {
+function playSong(songId, title) {
     // Create an audio element
+    console.log(title);
     var audio = document.createElement('audio');
     audio.controls = true;
     audio.autoplay = true;
@@ -30,6 +35,8 @@ function playSong(songId) {
     
     // Add a loop button
     var loopButton = document.createElement('button');
+    var titleElement = document.createElement('h4');
+    titleElement.textContent = title;
     loopButton.textContent = 'Loop Off';
     loopButton.onclick = function() {
         audio.loop = !audio.loop;
@@ -39,7 +46,7 @@ function playSong(songId) {
     var skipButton = document.createElement('button');
     skipButton.textContent = 'Skip';
     skipButton.onclick = function() {
-        playedSongs.push(songId);
+        playedSongs.push({"yt_id": songId, "title": title});
         playNextSong();
     }
     var rewindButton = document.createElement('button');
@@ -50,7 +57,7 @@ function playSong(songId) {
 
     audio.addEventListener('ended', function() {
         // If loop is enabled, start the song over
-        playedSongs.push(songId);
+        playedSongs.push({"yt_id": songId, "title": title});
         if (audio.loop) {
             audio.currentTime = 0;
             audio.play(); // Restart the audio
@@ -65,9 +72,11 @@ function playSong(songId) {
     // Create a container div for both the audio element and loop button
     var container = document.getElementById('audioPlayerContainer');
     container.innerHTML = '';
+    container.appendChild(titleElement);
     container.appendChild(audio);
     container.appendChild(loopButton);
     container.appendChild(skipButton);
     container.appendChild(rewindButton);
+
 }
 

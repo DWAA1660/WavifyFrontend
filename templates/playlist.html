@@ -98,7 +98,7 @@
             var results = {{ results | tojson }};
             results.forEach(function(result) {
                 console.log("loop 1");
-                almostPlaySong(result.yt_id);
+                almostPlaySong(result.yt_id, result.title);
             });
         });
     </script>
@@ -148,8 +148,7 @@
         <main>
             <button class="loop-button" onclick="toggleLoop()">Enable Loop</button>
             {% for result in results %}
-            <div class="result" id="result" onClick="almostPlaySong('{{ result.yt_id }}')">
-
+            <div class="result" id="result" onClick="almostPlaySong('{{ result.yt_id }}', '{{ result.title }}')">
                 <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
                 <h2>{{ result.title }}</h2>
                 <p><strong>Channel:</strong> {{ result.channel }}</p>
