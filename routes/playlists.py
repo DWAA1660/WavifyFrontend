@@ -20,8 +20,9 @@ def divide_into_groups(lst, group_size):
 async def fetch_song_info(session, song):
     url = f"https://musicbackend.lunes.host/song_from_yt_info/{song}"
     async with session.get(url) as response:
-        return await response.json()
-
+        resp = await response.json()
+        resp['thumbnail'] = f"https://i.ytimg.com/vi/{song}/default.jpg"
+        return resp
 async def fetch_all_song_info(songs_list):
     async with aiohttp.ClientSession() as session:
         tasks = [fetch_song_info(session, song) for song in songs_list]
@@ -97,9 +98,9 @@ async def play_playlist(pl_id: str):
     if res is None:
         return "This playlist doesnt exist"
     try:
-        songs_list=res[2].split("&&")
+        songs_list: list=res[2].split("&&")
         songs_list.remove("")
-    except AttributeError:
+    except:
         songs_list = []
         
     if songs_list == []:
