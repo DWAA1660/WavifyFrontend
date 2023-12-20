@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .result {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .result img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 3px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        p {
+            color: #777;
+        }
+
+        #audioPlayerContainer {
+                position: sticky;
+                bottom: 0;
+                background-color: white;
+                padding: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+        }
+            
+
+    </style>
+    <script src="{{ url_for('static', filename='search.js') }}"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6122367965027230"
+     crossorigin="anonymous"></script>
+    <!-- Ads baby -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-6122367965027230"
+        data-ad-slot="8775962733"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var addSongButtons = document.querySelectorAll('.add-song-button');
+    
+            addSongButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var songId = this.getAttribute('data-song-id');
+                    var playlistId = document.getElementById('playlist_to_add').value;
+    
+                    // Send AJAX request
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/add_song', true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            // Handle the response if needed
+                            console.log(xhr.responseText);
+                        }
+                    };
+    
+                    // Construct the request body
+                    var params = 'song_id=' + encodeURIComponent(songId) + '&pl_id=' + encodeURIComponent(playlistId);
+    
+                    // Send the request
+                    xhr.send(params);
+                });
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+    {% if results is none %}
+        <form action="/search" method="post">
+            <label for="search_query">Search:</label>
+            <input type="text" id="search_query" name="search_query" required>
+            <button type="submit">Search</button>
+        </form>
+    {% else %}
+        <header>
+            <h1>Explore songs</h1>
+        </header>
+        <main>
+            <select id="playlist_to_add" name="playlist_to_ad" required>
+                {% for playlist in playlists %}
+                <option value="{{ playlist[0] }}">{{ playlist[3] }}</option>
+                {% endfor %}
+            </select>
+            
+
+            {% for result in results %}
+            <div class="result" id="result" onClick="almostPlaySong('{{ result.id }}')">
+
+                <img src="https://i.ytimg.com/vi/{{ result.yt_id }}/default.jpg" alt="{{ result.title }}">
+                <h2>{{ result.title }}</h2>
+                <p><strong>Channel:</strong> {{ result.channel }}</p>
+                <button class="add-song-button" data-song-id="{{ result.id }}">Add to Playlist</button>
+
+
+                
+            </div> 
+            {% endfor %}
+
+            
+        </main>
+        <div id="audioPlayerContainer"></div>
+    {% endif %}
+</body>
+</html>
