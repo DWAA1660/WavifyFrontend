@@ -30,8 +30,8 @@ function playSong(songId, title) {
     
     // Add a loop button
     var loopButton = document.createElement('button');
-    var title = document.createElement('h4');
-    title.textContent = title;
+    var titleElement = document.createElement('h4');
+    titleElement.textContent = title;
     loopButton.textContent = 'Loop Off';
     loopButton.onclick = function() {
         audio.loop = !audio.loop;
@@ -67,10 +67,11 @@ function playSong(songId, title) {
     // Create a container div for both the audio element and loop button
     var container = document.getElementById('audioPlayerContainer');
     container.innerHTML = '';
+    container.appendChild(titleElement);
     container.appendChild(audio);
     container.appendChild(loopButton);
     container.appendChild(skipButton);
     container.appendChild(rewindButton);
-    container.appendChild(title);
+    
 }
 
