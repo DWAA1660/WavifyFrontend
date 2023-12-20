@@ -5,7 +5,7 @@ from youtube_search import YoutubeSearch
 from spotify import get_all_song_names
 from proxy import get_proxy
 import os, json, time
-from scripts import get_playlists
+from scripts import *
 import requests
 from threadedreturn import ThreadWithReturnValue
 import asyncio
@@ -17,16 +17,7 @@ playlists_bp = Blueprint('playlists', __name__)
 def divide_into_groups(lst, group_size):
     return [lst[i:i + group_size] for i in range(0, len(lst), group_size)]
 
-async def fetch_song_info(session, song):
-    url = f"https://musicbackend.lunes.host/song_from_yt_info/{song}"
-    async with session.get(url) as response:
-        resp = await response.json()
-        resp['thumbnail'] = f"https://i.ytimg.com/vi/{song}/default.jpg"
-        return resp
-async def fetch_all_song_info(songs_list):
-    async with aiohttp.ClientSession() as session:
-        tasks = [fetch_song_info(session, song) for song in songs_list]
-        return await asyncio.gather(*tasks)
+
 
 @playlists_bp.route("/playlist-create", methods=["GET", "POST"])
 def create_playlist():
@@ -106,12 +97,9 @@ async def play_playlist(pl_id: str):
     if songs_list == []:
         return render_template('playlist.html', results=None)
     print(time.time() - request_time, 3)
-    threads = {}
-    i = 0
+
     cleaned_results = await fetch_all_song_info(songs_list)
-    print(time.time() - request_time, 5)
     owner_name = db.execute("SELECT display_name from users where id = ?", (res[1],)).fetchone()
-    print(time.time() - request_time, 6)
     return render_template('playlist.html', results=cleaned_results, name=res[3], owner=owner_name[0], pl_id=pl_id)
     
 

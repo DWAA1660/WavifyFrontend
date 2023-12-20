@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, current_app, session, redirect, url_for
 from main import download_video
 
+import random, requests
 from youtube_search_music import YoutubeMusicSearch
 from threadedreturn import ThreadWithReturnValue
 from config import GOOGLE_API
@@ -59,4 +60,13 @@ def search():
         return render_template("search.html", results=clean_returned, playlists=playlists)
     else:
         return render_template("search.html", results=None)
+    
+@search_bp.route("/home", methods=["GET"])
+async def home():
+    print(1)
+    songs_list = requests.get("https://musicbackend.lunes.host/list_songs").json()
+    songs_info = random.choices(songs_list, k=20)
+
+    return render_template('home.html', results=songs_info)
+    
 
