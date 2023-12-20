@@ -127,7 +127,7 @@
             
 
             {% for result in results %}
-            <div class="result" id="result" onClick="almostPlaySong('{{ result.yt_id }}', '{{ result.title }}')">
+            <div class="result" id="result" onClick="almostPlaySong('{{ result.id }}', '{{ result.title }}')">
 
                 <img src="{{ result.thumbnail }}" alt="{{ result.title }}">
                 <h2>{{ result.title }}</h2>
