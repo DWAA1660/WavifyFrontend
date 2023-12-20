@@ -4,7 +4,7 @@ var playedSongs = []
 function almostPlaySong(songId, title) {
     var player = document.getElementById("dynamicplayer");
     if (player == null ) {
-        playSong(songId);
+        playSong(songId, title);
     }
     else{
         queue.push({"yt_id": songId, "title": title});
@@ -13,7 +13,8 @@ function almostPlaySong(songId, title) {
 
 function playNextSong(reversed){
     if (!reversed) {
-    playSong(queue.shift().yt_id);
+    var song = queue.shift()
+    playSong(song.yt_id, song.title);
     }
     else{
         playSong(playedSongs[playedSongs.length.yt_id - 1])
