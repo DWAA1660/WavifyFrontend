@@ -13,7 +13,9 @@ def login():
         res = db.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password,)).fetchone()
         print(res)
         if res is not None:
+            session.permanent = True 
             session['email'] = email
+            session.permanent = True 
             return redirect(url_for('search.index'))
         else:
             return "WRONG LOSER"
