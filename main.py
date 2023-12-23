@@ -5,7 +5,6 @@ from database import Database
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-session.permanent = True 
 db = Database("database.db")
 def create_app():
 
