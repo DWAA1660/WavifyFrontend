@@ -1,10 +1,11 @@
-from flask import Flask, current_app
+from flask import Flask, current_app, session
 import requests
 from config import SECRET_KEY
 from database import Database
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
+session.permanent = True 
 db = Database("database.db")
 def create_app():
 
