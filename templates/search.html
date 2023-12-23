@@ -115,6 +115,11 @@
             <button type="submit">Search</button>
         </form>
     {% else %}
+    <form action="/search" method="post">
+        <label for="search_query">Search:</label>
+        <input type="text" id="search_query" name="search_query" required>
+        <button type="submit">Search</button>
+    </form>
         <header>
             <h1>Search Results</h1>
         </header>
