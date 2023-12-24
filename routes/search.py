@@ -66,7 +66,7 @@ def search():
 async def home():
     print(1)
     songs_list = requests.get("https://musicbackend.lunes.host/list_songs").json()
-    songs_info = random.choices(songs_list, k=20)
+    songs_info = random.choices(songs_list, k=100)
 
     return render_template('home.html', results=songs_info)
     
