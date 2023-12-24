@@ -140,7 +140,7 @@
             <a href= "{{ url_for('playlists.playlist')}}">Playlists</a>
         </header>
         <main>
-            {% if playlists not none%}
+            {% if playlists is not none %}
             <select id="playlist_to_add" name="playlist_to_ad" required>
                 
                 {% for playlist in playlists %}
