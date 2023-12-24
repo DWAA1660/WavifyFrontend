@@ -115,8 +115,14 @@
             <button type="submit">Search</button>
         </form>
     {% else %}
+    <form action="/search" method="post">
+        <label for="search_query">Search:</label>
+        <input type="text" id="search_query" name="search_query" required>
+        <button type="submit">Search</button>
+    </form>
         <header>
             <h1>Explore songs</h1>
+            <a href= "{{ url_for('playlists')}}">Playlists</a>
         </header>
         <main>
             <select id="playlist_to_add" name="playlist_to_ad" required>
