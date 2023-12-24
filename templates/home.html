@@ -140,12 +140,14 @@
             <a href= "{{ url_for('playlists.playlist')}}">Playlists</a>
         </header>
         <main>
+            {% if playlists not none%}
             <select id="playlist_to_add" name="playlist_to_ad" required>
+                
                 {% for playlist in playlists %}
                 <option value="{{ playlist[0] }}">{{ playlist[3] }}</option>
                 {% endfor %}
             </select>
-            
+            {%endif%}
 
             {% for result in results %}
             <div class="result" id="result" onClick="almostPlaySong('{{ result.yt_id }}', '{{ result.title }}')">
