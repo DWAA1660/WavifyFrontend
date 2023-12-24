@@ -16,7 +16,7 @@ def login():
             session.permanent = True 
             session['email'] = email
             session.permanent = True 
-            return redirect(url_for('search.index'))
+            return redirect(url_for('search.home'))
         else:
             return "WRONG LOSER"
     return render_template('login.html')
