@@ -67,7 +67,11 @@ async def home():
     print(1)
     songs_list = requests.get("https://musicbackend.lunes.host/list_songs").json()
     songs_info = random.choices(songs_list, k=100)
+    if 'email' in session:
+        playlists = get_playlists(session['email'])
+    else:
+        playlists = None
 
-    return render_template('home.html', results=songs_info)
+    return render_template('home.html', results=songs_info, playlists=playlists)
     
 
