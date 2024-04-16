@@ -65,7 +65,7 @@ def search():
 @search_bp.route("/home", methods=["GET"])
 async def home():
     print(1)
-    songs_list = requests.get("https://musicbackend.lunes.host/list_songs").json()
+    songs_list = requests.get("https://musicbackend.lunes.host/list_songs", timeout=60).json()
     songs_info = random.choices(songs_list, k=100)
     if 'email' in session:
         playlists = get_playlists(session['email'])
