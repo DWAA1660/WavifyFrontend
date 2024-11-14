@@ -1,11 +1,12 @@
 import random
 import requests
+from security import safe_requests
 
 
 def check_if_work(proxy):
     try:
         print(proxy)
-        response = requests.get(
+        response = safe_requests.get(
             "https://www.google.com", proxies={"http": proxy}, timeout=5
         )
         return response.status_code == 200

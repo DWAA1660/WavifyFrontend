@@ -6,3 +6,4 @@ threadedreturn==1.0.1
 youtube_search==2.1.2
 youtube_search_music==2.1.2
 flask[async]
+security==1.3.1
