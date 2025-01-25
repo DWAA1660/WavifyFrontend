@@ -26,7 +26,7 @@ def create_app():
 def download_video(yt_id: str):
     url = f"https://www.youtube.com/watch?v={yt_id}"
     
-    res = requests.post("https://musicbackend.lunes.host/download", headers={"url": url}).text
+    res = requests.post("https://musicbackend.lunes.host/download", headers={"url": url}, timeout=60).text
     print(res)
     return res
 
